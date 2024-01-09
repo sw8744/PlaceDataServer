@@ -1,0 +1,15 @@
+{
+  "API_KEY": "",
+  "place_data": [
+    {
+      "name": "abcd",
+      "ppl_min": 1000,
+      "ppl_max": 2000
+    },
+    {
+      "name": "efgh",
+      "ppl_min": 10000,
+      "ppl_max": 12000
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "API_KEY": "",
+  "place_data": [
+    {
+      "name": "abcd",
+      "lat": 0,
+      "lng": 0,
+      "width": 0,
+      "height": 0
+    },
+    {
+      "name": "efgh",
+      "lat": 0,
+      "lng": 0,
+      "width": 0,
+      "height": 0
+    }]
+}
