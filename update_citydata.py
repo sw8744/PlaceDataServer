@@ -75,8 +75,16 @@ async def register(place: PlaceRegisterDTO):
 @app.get("/places")
 async def places():
     curs.execute("SELECT * FROM place")
+    result = {}
     rows = curs.fetchall()
-    return {"places": rows}
+    for row in rows:
+        result[row[0]] = {
+            "lat": row[1],
+            "lng": row[2],
+            "width": row[3],
+            "height": row[4]
+        }
+    return result
 
 
 @app.post("/update")
