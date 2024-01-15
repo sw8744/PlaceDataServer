@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-conn = pymysql.connect(host="app.ishs.co.kr", user="", password="", db="placedata", charset="utf8")
+conn = pymysql.connect(host="app.ishs.co.kr", user="root", password="ishs12345!", db="placedata", charset="utf8")
 curs = conn.cursor()
 
 
@@ -70,6 +70,13 @@ async def register(place: PlaceRegisterDTO):
         return {"message": "success"}
     else:
         return {"message": "not authorized"}
+
+
+@app.get("/places")
+async def places():
+    curs.execute("SELECT * FROM place")
+    rows = curs.fetchall()
+    return {"places": rows}
 
 
 @app.post("/update")
