@@ -79,10 +79,10 @@ async def places():
     rows = curs.fetchall()
     for row in rows:
         result[row[0]] = {
-            "lat": row[1],
-            "lng": row[2],
-            "width": row[3],
-            "height": row[4]
+            "lat": str(row[1]),
+            "lng": str(row[2]),
+            "width": str(row[3]),
+            "height": str(row[4])
         }
     return result
 
