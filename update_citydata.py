@@ -79,13 +79,25 @@ async def places():
     rows = curs.fetchall()
     for row in rows:
         result[row[0]] = {
-            "lat": str(row[1]),
-            "lng": str(row[2]),
-            "width": str(row[3]),
-            "height": str(row[4])
+            "lat": row[1],
+            "lng": row[2],
+            "width": row[3],
+            "height": row[4]
         }
     return result
 
+@app.get("/people")
+async def people():
+    curs.execute("SELECT * FROM people WHERE time IN (SELECT MAX(time) FROM people GROUP BY place_name)")
+    result = {}
+    rows = curs.fetchall()
+    for row in rows:
+        result[row[0]] = {
+            "time": row[1],
+            "ppl_min": row[2],
+            "ppl_max": row[3]
+        }
+    return result
 
 @app.post("/update")
 async def update(place: PlaceUpdateDTO):
