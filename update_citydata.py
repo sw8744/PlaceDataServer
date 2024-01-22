@@ -48,6 +48,17 @@ class PlaceUpdateDTO(BaseModel):
     place_data: list[PlaceUpdate]
 
 
+def calculate_peopleChangeRate(current, previous):
+    # cases when previous is 0 or current is 0
+    if previous == 0 and current == 0:
+        return 0
+    elif previous == 0:
+        return 100
+    elif current == 0:
+        return -100
+    else:
+        return (current - previous) / previous * 100
+
 @app.post("/register")
 async def register(place: PlaceRegisterDTO):
     if auth(place.API_KEY):
@@ -99,6 +110,27 @@ async def people():
         }
     return result
 
+@app.get("/peopleChangeRate/")
+async def peopleChangeRate():
+    curs.execute("SELECT place_name from place")
+    places = curs.fetchall()
+    result = {}
+    for place in places:
+        curs.execute(f"SELECT ppl_min, ppl_max FROM people WHERE place_name='{place[0]}' ORDER BY time DESC LIMIT 2")
+        rows = curs.fetchall()
+        if len(rows) == 2:
+            print(rows)
+            result[place[0]] = {
+                "ppl_min_rate": calculate_peopleChangeRate(rows[0][0], rows[1][0]),
+                "ppl_max_rate": calculate_peopleChangeRate(rows[0][1], rows[1][1])
+            }
+        else:
+            result[place[0]] = {
+                "ppl_min_rate": 0,
+                "ppl_max_rate": 0
+            }
+    return result
+
 @app.post("/update")
 async def update(place: PlaceUpdateDTO):
     t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -115,4 +147,4 @@ async def update(place: PlaceUpdateDTO):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="localhost", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
