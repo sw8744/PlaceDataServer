@@ -48,7 +48,7 @@ class PlaceUpdateDTO(BaseModel):
     place_data: list[PlaceUpdate]
 
 
-def calculate_peopleChangeRate(current, previous):
+def calculate_peopleChangeRate(current, previous) -> float:
     # cases when previous is 0 or current is 0
     if previous == 0 and current == 0:
         return 0
@@ -126,8 +126,8 @@ async def peopleChangeRate():
             }
         else:
             result[place[0]] = {
-                "ppl_min_rate": 0,
-                "ppl_max_rate": 0
+                "ppl_min_rate": 0.0,
+                "ppl_max_rate": 0.0
             }
     return result
 
