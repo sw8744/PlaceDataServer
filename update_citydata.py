@@ -51,13 +51,13 @@ class PlaceUpdateDTO(BaseModel):
 def calculate_peopleChangeRate(current, previous) -> float:
     # cases when previous is 0 or current is 0
     if previous == 0 and current == 0:
-        return 0
+        return 0.0
     elif previous == 0:
-        return 100
+        return 100.0
     elif current == 0:
-        return -100
+        return -100.0
     else:
-        return (current - previous) / previous * 100
+        return (current - previous) / previous * 100.0
 
 @app.post("/register")
 async def register(place: PlaceRegisterDTO):
