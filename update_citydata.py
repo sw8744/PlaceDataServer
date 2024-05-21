@@ -70,6 +70,7 @@ async def register(place: PlaceRegisterDTO):
             curs.execute(
                 f"INSERT INTO place VALUES ('{p.name}', {p.lat}, {p.lng}, {p.width}, {p.height})")
         conn.commit()
+        conn.close()
         return {"message": "success"}
     else:
         return {"message": "not authorized"}
@@ -85,6 +86,7 @@ async def register(place: PlaceRegisterDTO):
             curs.execute(
                 f"UPDATE place SET latitude={p.lat}, longitude={p.lng}, width={p.width}, height={p.height} WHERE place_name='{p.name}'")
         conn.commit()
+        conn.close()
         return {"message": "success"}
     else:
         return {"message": "not authorized"}
@@ -104,6 +106,7 @@ async def places():
             "width": row[3],
             "height": row[4]
         }
+    conn.close()
     return result
 
 @app.get("/people")
@@ -119,6 +122,7 @@ async def people():
             "ppl_min": row[2],
             "ppl_max": row[3]
         }
+    conn.close()
     return result
 
 @app.get("/peopleChangeRate/")
@@ -142,6 +146,7 @@ async def peopleChangeRate():
                 "ppl_min_rate": 0.0,
                 "ppl_max_rate": 0.0
             }
+    conn.close()
     return result
 
 @app.post("/update")
@@ -154,6 +159,7 @@ async def update(place: PlaceUpdateDTO):
             curs.execute(
                 f"INSERT INTO people VALUES ('{p.name}', '{t}', {p.ppl_min}, {p.ppl_max})")
         conn.commit()
+        conn.close()
         return {"message": "success"}
     else:
         return {"message": "not authorized"}
