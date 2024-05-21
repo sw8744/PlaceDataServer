@@ -16,7 +16,7 @@ app.add_middleware(
 )
 
 HOST = "jrh-ishs.kro.kr"
-USER = "root"
+USER = "jrh"
 PASSWORD = "ishs12345!"
 DB = "placedata"
 
