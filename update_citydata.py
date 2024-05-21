@@ -15,8 +15,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-conn = pymysql.connect(host="app.ishs.co.kr", user="root", password="ishs12345!", db="placedata", charset="utf8")
-curs = conn.cursor()
+HOST = "app.ishs.co.kr"
+USER = "root"
+PASSWORD = "ishs12345!"
+DB = "placedata"
 
 
 @app.get("/")
@@ -61,6 +63,8 @@ def calculate_peopleChangeRate(current, previous) -> float:
 
 @app.post("/register")
 async def register(place: PlaceRegisterDTO):
+    conn = pymysql.connect(host=HOST, user=USER, password=PASSWORD, db=DB, charset="utf8")
+    curs = conn.cursor()
     if auth(place.API_KEY):
         for p in place.place_data:
             curs.execute(
@@ -74,6 +78,9 @@ async def register(place: PlaceRegisterDTO):
 @app.patch("/register")
 async def register(place: PlaceRegisterDTO):
     if auth(place.API_KEY):
+        conn = pymysql.connect(host="app.ishs.co.kr", user="root", password="ishs12345!", db="placedata",
+                               charset="utf8")
+        curs = conn.cursor()
         for p in place.place_data:
             curs.execute(
                 f"UPDATE place SET latitude={p.lat}, longitude={p.lng}, width={p.width}, height={p.height} WHERE place_name='{p.name}'")
@@ -85,6 +92,8 @@ async def register(place: PlaceRegisterDTO):
 
 @app.get("/places")
 async def places():
+    conn = pymysql.connect(host=HOST, user=USER, password=PASSWORD, db=DB, charset="utf8")
+    curs = conn.cursor()
     curs.execute("SELECT * FROM place")
     result = {}
     rows = curs.fetchall()
@@ -99,6 +108,8 @@ async def places():
 
 @app.get("/people")
 async def people():
+    conn = pymysql.connect(host=HOST, user=USER, password=PASSWORD, db=DB, charset="utf8")
+    curs = conn.cursor()
     curs.execute("SELECT * FROM people WHERE time IN (SELECT MAX(time) FROM people GROUP BY place_name)")
     result = {}
     rows = curs.fetchall()
@@ -112,6 +123,8 @@ async def people():
 
 @app.get("/peopleChangeRate/")
 async def peopleChangeRate():
+    conn = pymysql.connect(host=HOST, user=USER, password=PASSWORD, db=DB, charset="utf8")
+    curs = conn.cursor()
     curs.execute("SELECT place_name from place")
     places = curs.fetchall()
     result = {}
@@ -133,6 +146,8 @@ async def peopleChangeRate():
 
 @app.post("/update")
 async def update(place: PlaceUpdateDTO):
+    conn = pymysql.connect(host=HOST, user=USER, password=PASSWORD, db=DB, charset="utf8")
+    curs = conn.cursor()
     t = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if auth(place.API_KEY):
         for p in place.place_data:
